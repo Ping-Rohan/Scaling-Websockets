@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  server_1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_NAME=server_1
+      - SERVER_PORT=3000
+    depends_on:
+      - kafka
+      - redis
+  server_2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_NAME=server_2
+      - SERVER_PORT=3001
+    depends_on:
+      - kafka
+      - redis
+  server_3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_NAME=server_3
+      - SERVER_PORT=3002
+    depends_on:
+      - kafka
+      - redis
+  nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - server_1
+      - server_2
+      - server_3
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+  redis:
+    image: redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
