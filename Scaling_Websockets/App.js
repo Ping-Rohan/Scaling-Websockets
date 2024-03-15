@@ -12,7 +12,7 @@ const redisClient = createClient({
   url: 'redis://redis:6379',
 });
 
-app.get('/get-token', (req, res) => {
+app.get('/home', (req, res) => {
   res.send(`Hello from ${process.env.SERVER_NAME}!`);
 });
 
