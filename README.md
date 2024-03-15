@@ -10,7 +10,6 @@ This Node.js application sets up a WebSocket server using Express and \`websocke
 
 ## Features:
 - **WebSocket Server**: Establishes a WebSocket server to handle incoming connections.
-- **Token Endpoint**: Provides a simple HTTP GET endpoint (\`/get-token\`) returning a greeting message with the server name.
 - **Kafka Integration**: Connects to Kafka broker for producing and consuming messages.
 - **Redis Integration**: Utilizes Redis for storing key-value pairs to associate WebSocket clients with servers.
 
